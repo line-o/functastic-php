@@ -40,24 +40,37 @@ nachher:
 
 ### Scope?
 ````php
-  function local_a () {
+  $local_a = function () {
     $a = 0;
-    return $a++;
+    echo $a++;
   }
-  local_a(); //returns 1
-  local_a(); //returns 1
+  $local_a(); //returns 1
+  $local_a(); //returns 1
 ````
 
 ````php
-  $a = 10;
-  function global_a () use ($a) {
-    return $a++;
-  }
+  $a = 1;
+  $global_a = function() use ($a) {
+    return ++$a;
+  };
 
-  global_a(); //returns 11
-  global_a(); //returns 12
+  $global_a(); //returns 2
+  $global_a(); //returns 2
   $a = 0;
-  global_a(); //returns 1
+  $global_a(); //returns 2
+````
+
+###(Don't) Use the reference, Luke!
+````php
+  $a = 1;
+  $global_a = function() use (&$a) {
+    return ++$a;
+  };
+
+  $global_a(); //returns 2
+  $global_a(); //returns 3
+  $a = 0;
+  $global_a(); //returns 1
 ````
 
 zurück zum Beispiel:
@@ -69,20 +82,7 @@ zurück zum Beispiel:
 	print(count(array_filter($map_func, range(100))));
   }
 ````
-woher kommt denn jetzt die _range_ Funktion
-
-````php
-function range($boundary_a, $boundary_b) {
-  $range = array();
-  if (!isset($boundary_b)) {
-  	return range(0, $boundary_a);
-  }
-  for($c=$boundary_a;$c<$boundary_b;$c++) {
-  	array_push($c, $range);
-  }
-  return $range;
-}
-````
+*woher kommt denn jetzt die _range_ Funktion her...*
 
 
 ### partial application
@@ -99,4 +99,35 @@ function add ($a, $b) {
 	}
 }
 ````
-*Finally landed in PHP 5.3 and 5.4*
+Etwas genereller:
+````php
+function partial() {
+	$orig_args = func_get_args();
+	$func = array_shift($orig_args);
+	return function () use ($orig_args, $func) {
+		$real_args = array_merge($orig_args, func_get_args());
+		return call_user_func_array($func, $real_args);
+	};
+}
+````
+
+##Ich will es gleich
+
+Immediate Function
+````php
+function (){ echo 'HI!' }();
+print(function (){ return 'HI!' });
+````
+
+````php
+call_user_func(function () {
+	//code gets immediately executed
+});
+````
+
+##Ich will es gleich
+
+````php
+````
+
+*And all this _finally_ landed in PHP 5.3 and 5.4*
