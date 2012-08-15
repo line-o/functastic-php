@@ -75,14 +75,13 @@ nachher:
 
 zurück zum Beispiel:
 ````php
-  for($i=100;$i--;) {
-	$map_func = function ($n) use ($i) {
-      return ($n > $i ? 'true' : 'false');
-	};
-	print(count(array_filter($map_func, range(100))));
+	$rng = range(0, 100);
+  for($i=100;$i--;)
+  {
+    $map_func = function ($n) use ($i) { return ($n > $i) };
+    print("#<$i: " . count(array_filter($map_func, $rng)) . PHP_EOL);
   }
 ````
-*woher kommt denn jetzt die _range_ Funktion her...*
 
 
 ### partial application
