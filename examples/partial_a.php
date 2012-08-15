@@ -1,7 +1,12 @@
 <?php
-// higher order function
-// partial application
-// currying
+/**
+ * higher order functions and
+ * partial application (currying)
+ */
+
+/**
+ * add
+ */
 function add() {
 	$n = func_num_args();
 	if ($n == 0) return;
@@ -23,21 +28,23 @@ function add() {
 echo  'add(1,1) = ' . add(1, 1) . PHP_EOL;
 
 $add1 = add(1);
-echo  '$add1 = add(1); $add1(1) = ' . $add1(1) . PHP_EOL;
+echo  '$add1 = add(1); $add1(1) = ' . $add1(1) . PHP_EOL; // returns 2
 
-echo  'add(1)(1) = FATAL' . PHP_EOL;
-echo  '(add(1))(1) = FATAL' . PHP_EOL;
+//echo  'add(1)(1) = FATAL' . PHP_EOL;
+//echo  '(add(1))(1) = FATAL' . PHP_EOL;
 
-//
-// MULTIPLY
-//
-
+/**
+ * multiply
+ */
 function multiply($a, $b) {
 	$result = 0;
 	$add_b = add($b);
+
+	// add $b $a times
 	for ($i = $a; $a--; ) {
 		$result = $add_b($result);
 	}
+
 	return $result;
 }
 
@@ -46,3 +53,41 @@ echo  'multiply(1, 1) = ' . multiply(1, 1) . PHP_EOL;
 echo  'multiply(2, 3) = ' . multiply(2, 3) . PHP_EOL;
 
 echo  'multiply(4, 5) = ' . multiply(4, 5) . PHP_EOL;
+
+/**
+ * the recursive approach
+ * thanks to @fwg for this idea...
+ */
+function mulrec($a, $b) {
+	$result = 0;
+	$add_b = add($b);
+
+	//pass itself by reference to allow late binding
+	$rec_add = function ($i, $result, $add_b) use (&$rec_add) {
+		echo $result;
+		$result = $add_b($result);
+		if ($i) {
+			return $rec_add(--$i, $result, $add_b);
+		}
+		return $result;
+	};
+
+	return $rec_add(--$a, $result, $add_b);
+}
+
+echo 'mulrec(1,2) = ' . mulrec(1,2) . PHP_EOL;
+echo 'mulrec(2,3) = ' . mulrec(2,3) . PHP_EOL;
+echo 'mulrec(4,5) = ' . mulrec(4,5) . PHP_EOL;
+
+function partial() {
+	$orig_args = func_get_args();
+	$func = array_shift($orig_args);
+	return function () use ($orig_args, $func) {
+		$real_args = array_merge($orig_args, func_get_args());
+		return call_user_func_array($func, $real_args);
+	};
+}
+
+$p_add_two = partial(add, 2);
+
+echo 'partial(add,2) => (2) = ' . $p_add_two(2);
