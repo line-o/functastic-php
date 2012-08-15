@@ -1,1 +1,1 @@
-Experimente mit den neuen Sprachfeatures von PHP eingeführt mit Version 5.3 und 5.4
+Experimente mit den neuen Sprachfeatures von PHP eingeführt mit den Versionen 5.3 und 5.4
