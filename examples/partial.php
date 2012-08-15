@@ -63,6 +63,7 @@ function mulrec($a, $b) {
 	$add_b = add($b);
 
 	//pass itself by reference to allow late binding
+	//to decrease the counter variable $i makes it a for-loop again 
 	$rec_add = function ($i, $result, $add_b) use (&$rec_add) {
 		echo $result;
 		$result = $add_b($result);
@@ -79,6 +80,10 @@ echo 'mulrec(1,2) = ' . mulrec(1,2) . PHP_EOL;
 echo 'mulrec(2,3) = ' . mulrec(2,3) . PHP_EOL;
 echo 'mulrec(4,5) = ' . mulrec(4,5) . PHP_EOL;
 
+/**
+ * general function for partial application
+ * @return closure
+ */
 function partial() {
 	$orig_args = func_get_args();
 	$func = array_shift($orig_args);
