@@ -80,19 +80,12 @@ echo 'mulrec(1,2) = ' . mulrec(1,2) . PHP_EOL;
 echo 'mulrec(2,3) = ' . mulrec(2,3) . PHP_EOL;
 echo 'mulrec(4,5) = ' . mulrec(4,5) . PHP_EOL;
 
-/**
- * general function for partial application
- * @return closure
- */
-function partial() {
-	$orig_args = func_get_args();
-	$func = array_shift($orig_args);
-	return function () use ($orig_args, $func) {
-		$real_args = array_merge($orig_args, func_get_args());
-		return call_user_func_array($func, $real_args);
-	};
-}
+include '../lib/curry.php';
 
-$p_add_two = partial(add, 2);
+$add = function ($a, $b) {
+    return $a + $b;
+};
 
-echo 'partial(add,2) => (2) = ' . $p_add_two(2);
+$p_add_two = curry($add, 2);
+
+echo 'curry($add,2) => (2) = ' . $p_add_two(2);
