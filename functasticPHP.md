@@ -1,5 +1,12 @@
 ![test](http://4.bp.blogspot.com/_6m1GwPz8e34/S6LaIgiBs0I/AAAAAAAAASw/66RPdKfgnfo/s200/functionalProgramming.png)
-# Functional Programming
+
+##whoami
+
+>Juri Leino 
+@spot-media
+
+
+##Functional Programming
 - (un)typed lambda calculus
 - type theory
 -- inference (Hindley-Milner)
@@ -7,16 +14,23 @@
 - predicate logic
 - mathematical proofs
 
-## getting started
+* Don't *really* know what all this is?
 
-### Lambda Funktionen
+* Me neither, but we may find out.
+
+##the Idea behind it
+
+* no side effects 
+* no state
+
+## Lambda functions
 ````php
 	$add = function ($a, $b) { return $a + $b; };
 ````
 
-### Funktionen als Parameter
+###Functions as Parameters
 
-vorher:
+before:
 ````php
   function greaterThanZero($n) {
 	return ($n > 0 ? 'true' : 'false');
@@ -24,10 +38,10 @@ vorher:
   print_r(array_map('greaterThanZero', array(0, 1)));
 ````
 
-* neue globale Funktion
-* mögliche Namenskollision
+* introduces a new global function
+* name collisions
 
-nachher:
+after:
 ````php
   $map_func = function ($n) {
 	    return ($n > 0 ? 'true' : 'false');
@@ -35,10 +49,11 @@ nachher:
   print_r(array_map($map_func, array(0, 1)));
 ````
 
-* anonyme (lambda) Funktion
-* existiert nur im lokal Scope
+* anonymous (lambda) function
+* exists only in local scope
 
 ### Scope?
+
 ````php
   $local_a = function () {
     $a = 0;
@@ -73,9 +88,10 @@ nachher:
   $global_a(); //returns 1
 ````
 
-zurück zum Beispiel:
+back to our example:
 ````php
 	$rng = range(0, 100);
+  
   for($i=100;$i--;)
   {
     $map_func = function ($n) use ($i) { return ($n > $i) };
@@ -110,9 +126,8 @@ function partial() {
 }
 ````
 
-##Ich will es gleich
+##Immediate Function
 
-Immediate Function
 ````php
 function (){ echo 'HI!' }();
 print(function (){ return 'HI!' });
@@ -124,9 +139,13 @@ call_user_func(function () {
 });
 ````
 
-##Ich will es gleich
+##Headline
 
 ````php
 ````
 
-*And all this _finally_ landed in PHP 5.3 and 5.4*
+##Things I learned?
+
+* I'm doing it wrong!
+* Let's hear what Kore has to say about it
+
