@@ -2,6 +2,7 @@
 <?php
 
 include('../lib/ycombinator.php');
+include('../lib/out.php');
 
 /**
  * The functional that returns
@@ -75,10 +76,6 @@ $defaults = array(
     'flavour' => 'recursive'
 );
 
-$out = function ($msg) {
-    exit($msg);
-};
-
 $error = function ($msg) use ($out, $flags) {
     $error_msg = "ERROR: $msg\nusage: php fibonacci [ " . join(" | ", $flags) . " ] <number>\n";
     $out($error_msg);
@@ -128,14 +125,13 @@ $parse_in = function ($args) use ($error, $sanitize_flag, $defaults) {
 };
 
 $calculate = function ($params) use ($out, $flavours) {
+    //measure execution time
     $time_start = microtime(true);
-
     $res = $flavours[$params['flavour']]($params['num']);
-
     $time_end = microtime(true);
-    $time = $time_end - $time_start;
 
     //post-processing
+    $time = $time_end - $time_start;
     $rounded = round($time, 32);
     $out("Fibonacci{{$params['flavour']}}({$params['num']}) = {$res}\n - calculation took {$rounded} seconds\n");
 };
