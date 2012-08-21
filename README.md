@@ -20,7 +20,8 @@
 
 ## Lambda functions
 
-````PHP
+````php
+<?php
     $add = function ($a, $b) { return $a + $b; };
 ````
 What they are good for?
@@ -28,7 +29,8 @@ What they are good for?
 ###Functions as Parameters
 
 before:
-````PHP
+````php
+<?php
     function do () {
         function greaterThanZero($n) {
             return ($n > 0 ? 'true' : 'false');
@@ -42,7 +44,8 @@ before:
 * name collisions
 
 after:
-````PHP
+````php
+<?php
     function do() {
         $map_func = function ($n) {
             return ($n > 0 ? 'true' : 'false');
@@ -57,7 +60,8 @@ after:
 
 ### Scope?
 
-````PHP
+````php
+<?php
     $local_a = function () {
         $a = 0;
         echo $a++;
@@ -66,7 +70,8 @@ after:
     $local_a(); //returns 1
 ````
 
-````PHP
+````php
+<?php
     $a = 1;
     $global_a = function() use ($a) {
         return ++$a;
@@ -79,7 +84,8 @@ after:
 ````
 
 ###Using the reference
-````PHP
+````php
+<?php
     $a = 1;
     $global_a = function() use (&$a) {
         return ++$a;
@@ -92,7 +98,8 @@ after:
 ````
 
 back to our example:
-````PHP
+````php
+<?php
     $rng = range(0, 100);
 
     for($i=100;$i--;)
@@ -106,7 +113,8 @@ back to our example:
 ## Currying / Partial Application
 
 specific example:
-````PHP
+````php
+<?php
     function add ($a, $b) {
         if (is_null($b)) {
             return function ($c) use ($a) {
@@ -119,7 +127,8 @@ specific example:
     }
 ````
 more generalized:
-````PHP
+````php
+<?php
     function partial()
     {
         $orig_args = func_get_args();
@@ -137,20 +146,23 @@ more generalized:
 Calling a closure immediately.
 
 these won't work:
-````PHP
+````php
+<?php
     function (){ echo 'HI!' }();
     print(function (){ return 'HI!' });
 ````
 
 this does:
-````PHP
+````php
+<?php
     call_user_func(function () {
         //code here gets immediately executed
     });
 ````
 
 and by passing a parameter you can provide some context: (without the use keyword)
-````PHP
+````php
+<?php
     call_user_func(function ($context) {
         //code here knows its $context
     }, $ctx);
@@ -165,29 +177,30 @@ Mathematically spoken
   f = F(f) //f is the fixed point of F
   f = Y(F) //Y returns the fixed point of the functional F
 
-````PHP
-    function Y($Functional) {
-        return call_user_func(
-            function ($x) use ($Functional) {
-                return $Functional(
-                    function ($v) use ($x) {
-                        return call_user_func(
-                            call_user_func($x, $x), $v
-                        );
-                    }
-                );
-            },
-            function ($x) use ($Functional) {
-                return $Functional(
-                    function ($v) use ($x) {
-                        return call_user_func(
-                            call_user_func($x, $x), $v
-                        );
-                    }
-                );
-            }
-        );
-    }
+````php
+<?php
+function Y($Functional) {
+    return call_user_func(
+        function ($x) use ($Functional) {
+            return $Functional(
+                function ($v) use ($x) {
+                    return call_user_func(
+                        call_user_func($x, $x), $v
+                    );
+                }
+            );
+        },
+        function ($x) use ($Functional) {
+            return $Functional(
+                function ($v) use ($x) {
+                    return call_user_func(
+                        call_user_func($x, $x), $v
+                    );
+                }
+            );
+        }
+    );
+}
 ````
 
 ###memoizing Y-combinator
@@ -200,13 +213,14 @@ This should make calls to f linear.
 My tests could not prove that.
 The ugly self-reference was the fastest.
 
-````PHP
-    $recFib = function ($n) use (&$recFib) {
-        if ($n == 0 || $n == 1) {
-            return $n;
-        }
-        return $recFib($n - 1) + $recFib($n - 2);
-    };
+````php
+<?php
+$recFib = function ($n) use (&$recFib) {
+    if ($n == 0 || $n == 1) {
+        return $n;
+    }
+    return $recFib($n - 1) + $recFib($n - 2);
+};
 ````
 
 
